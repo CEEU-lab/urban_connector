@@ -1,0 +1,17 @@
+orca
+numpy >= 1.22.2
+pandas >= 1.4.1
+streamlit >= 1.2
+matplotlib >= 3.4.3
+seaborn
+plotly
+plotly_express
+geopandas
+folium
+streamlit_folium >= 0.6.2
+osmnx
+networkx
+mapclassify
+rtree
+
+-e ../

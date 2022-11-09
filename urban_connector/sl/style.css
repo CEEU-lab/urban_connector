@@ -1,0 +1,33 @@
+.green_text {
+    color: green;
+}
+
+.bold_text {
+    font-weight: bold;
+}
+
+.load_successful_text{
+    background-color: green;
+    color:white;
+    border-radius: 0.4em;
+    padding: 0.5rem;
+    font-weight: bold;
+}
+
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+
+img.logo {
+    margin: 0px auto;
+    margin-top: -45px;
+    margin-bottom: 25px;
+    width: 200px;
+}
+img.logo-2 {
+    margin: 0px auto;
+    margin-top: 25px;
+    width: 200px;
+}
+img {
+    max-width: 100%;
+}
