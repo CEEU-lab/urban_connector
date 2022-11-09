@@ -121,3 +121,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# osmnx cache
+urban_connector/cache/
