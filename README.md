@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://github.com/CEEU-lab/urban_connector/blob/main/urban_connector/img/fire_streets.png" height="100">
+  <img src="https://github.com/CEEU-lab/urban_connector/blob/main/urban_connector/img/fire_streets.png" width="360" height="100">
 </p>
 
 # urban_connector
