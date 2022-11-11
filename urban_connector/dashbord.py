@@ -28,9 +28,9 @@ st.write(
 with open('./sl/style.css') as f:
     st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
 
-menu_list = st.sidebar.radio('Secciones', ["Inicio",  "Mobilidad urbana", "Accesibilidad"])
+menu_list = st.sidebar.radio('Secciones', ["Start",  "Connectivity", "Accessibility"])
 
-if menu_list == "Inicio":
+if menu_list == "Start":
 
     col1, _ ,col3 = st.columns((2,0.5,2))
 
@@ -38,7 +38,7 @@ if menu_list == "Inicio":
 
     col1.markdown("""
                 ```
-                > Le corbusier - calles son las venas del tejido urbano.
+                > Tools for urban mobility analysis
                 ```
     """)
 
@@ -46,26 +46,24 @@ if menu_list == "Inicio":
     col3.image(landing, width=550)
     
 
-    st.subheader('**Componentes de análisis**')
+    st.subheader('**Modeling sections**')
     st.markdown("""
     
-    * **Mobilidad urbana**:
+    * **Connectivity**:
         ```
-        - esta seccion permite estudiar el nivel de conectividad de una red de calles. Esto, mediante la construccion de distintas
-          metricas de centralidad y de la identificacion de los caminos mas cortos entre los nodos de la red.
+        - assess the connectivity level of network streets by providing centrality metrics and shortest path between nodes. 
         ```
-    * **Accesibilidad**:
+    * **Accessibility**:
         ```
-        - esta seccion permite construir una red de calles y evaluar el grado de accesibilidad a cada punto de la misma a
-          partir de la construccion de isocronas con el tiempo de viaje desde cada uno de sus nodos.
+        - estimates accessibility to theoric points of interest by calculating travel time isochrones from street network nodes.
         ```
     """)
 
 
-elif menu_list == "Mobilidad urbana":
+elif menu_list == "Connectivity":
 
-    st.subheader('Visor de mobilidad')
-    st.markdown('Seleccione un punto de referencia sobre el mapa para generar una red de calles.')
+    st.subheader('Street mobility')
+    st.markdown('Select a reference point on the map to generate a street network.')
     st.markdown(' ')
 
     network_types = ["all_private", "all", "bike", "drive", "drive_service", "walk"]
@@ -74,9 +72,9 @@ elif menu_list == "Mobilidad urbana":
     col1, col2, col3, _, col4, col5 = st.columns((0.35, 0.45, 0.5, 0.05, 0.8, 0.75))
     col6, col7 = st.columns(2)
 
-    selected_network_type = col1.selectbox('Tipo de red', network_types, index=5)
-    selected_stats = col2.selectbox('Métrica de conectividad', connectivity_stats, index=0)
-    buffer_dist = col3.number_input('Indique buffer de distancia (mts)', min_value=300)
+    selected_network_type = col1.selectbox('Network type', network_types, index=5)
+    selected_stats = col2.selectbox('Connectivity metric', connectivity_stats, index=0)
+    buffer_dist = col3.number_input('DIstance buffer (mts)', min_value=300)
 
     if 'ref' in orca.list_injectables():
         ref = orca.get_injectable('ref')
@@ -143,24 +141,23 @@ elif menu_list == "Mobilidad urbana":
         folium_static(fig2, width=625, height=490)
 
     definitions = {
-                   'Node degree':'El grado de un nodo indica la cantidad de ejes o calles adyacentes al nodo.',
-                   'Degree centrality':'''El grado de centralidad (o degree centrality) de un nodo computa la cantidad
-                                        de conexiones del nodo normalizada por el total de nodos dentro de la red. Así,
-                                        dicha métrica indica el porcentage de conexiones actual sobre el máximo posible.''',
-                   'Betweenness centrality':'''La centralidad de intermediación, o simplemente intermediación
-                                            (en inglés, betweenness) es una medida de centralidad
-                                            que cuantifica el número de veces que un nodo se encuentra entre los
-                                            caminos más cortos de la red. Un nodo tendrá una alta intermediación si
-                                            se encuentra presente en un elevedado porcentage de los mismos.''',
+                   'Node degree':'The degree of a node is the number of edges (streets) connected to the node',
+                   'Degree centrality':'''The degree of centrality (or degree centrality) of a node computes the 
+                                          number of connections of the node normalized by the total number of nodes within the network. 
+                                          Thus, this metric indicates the percentage of current connections over the maximum possible.''',
+                   'Betweenness centrality':'''Betweenness centrality is a measure of centrality
+                                            which quantifies the number of times a node is between the
+                                            shortest paths in the network. A node will have high betweenness if
+                                            It is present in a high percentage of them.''',
                    }
-    with st.expander("Inspeccionar indicador"):
+    with st.expander("Inspect indicator"):
      st.write('{}'.format(definitions[selected_stats]))
 
-elif menu_list == "Accesibilidad":
-    st.subheader('Visor de accesibilidad')
-    st.markdown('''Indique el lugar donde desea construir una red de calles y cliquee sobre
-                   el mapa para obtener un punto de referencia al que se calcularán los tiempos de viaje
-                   para todos los nodos de la red.''')
+elif menu_list == "Accessibility":
+    st.subheader('Street accessibility')
+    st.markdown('''Indicate the name place where you want to build a street network and click on
+                   the map to get a reference point to which travel times will be calculated
+                   for all nodes in the network.''')
     st.markdown(' ')
 
     col1, col2, col3 = st.columns(3)
@@ -168,8 +165,8 @@ elif menu_list == "Accesibilidad":
     place = col1.text_input(label='Ingresar nombre del sitio', value=default_place)
 
     network_types = ["all_private", "all", "bike", "drive", "drive_service", "walk"]
-    selected_network_type = col2.selectbox('Tipo de red', network_types, index=5)
-    travel_speed = col3.number_input('Indique la velocidad de viaje (en km/h)', min_value=4)
+    selected_network_type = col2.selectbox('Network type', network_types, index=5)
+    travel_speed = col3.number_input('Travel speed (km/h)', min_value=4)
 
 
     G = build_graph_by_name(place, network_type=selected_network_type)
