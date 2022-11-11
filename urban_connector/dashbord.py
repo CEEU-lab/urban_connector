@@ -12,7 +12,7 @@ from accessibility import *
 
 
 st.set_page_config(
-    page_title="Urban Connector",
+    page_title="Urban Connectorr",
     page_icon="./sl//favicon.ico",
     layout='wide',
     initial_sidebar_state='collapsed')
