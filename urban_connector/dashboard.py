@@ -130,8 +130,8 @@ elif menu_list == "Connectivity":
     first_node = list(ordinal_idx_to_osmnidx.keys())[0]
     last_node = list(ordinal_idx_to_osmnidx.keys())[-1]
 
-    origin = col4.number_input('Origen', value=first_node)
-    destin = col5.number_input('Destino', value=last_node)
+    origin = col4.number_input('Origin', value=first_node)
+    destin = col5.number_input('Destination', value=last_node)
 
     route = nx.shortest_path(G, ordinal_idx_to_osmnidx[origin], ordinal_idx_to_osmnidx[destin])
 
@@ -162,7 +162,7 @@ elif menu_list == "Accessibility":
 
     col1, col2, col3 = st.columns(3)
     default_place= 'Villa Hidalgo, José León Suárez, Partido de General San Martín, Buenos Aires'
-    place = col1.text_input(label='Ingresar nombre del sitio', value=default_place)
+    place = col1.text_input(label='Place your network', value=default_place)
 
     network_types = ["all_private", "all", "bike", "drive", "drive_service", "walk"]
     selected_network_type = col2.selectbox('Network type', network_types, index=5)
