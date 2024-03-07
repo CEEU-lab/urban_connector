@@ -1,3 +1,6 @@
+**/cache
+**/__pycache__
+
 # Build and Release Folders
 bin-debug/
 bin-release/
