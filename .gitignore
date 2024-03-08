@@ -1,3 +1,5 @@
+cache/
+output_results/
 **/cache
 **/__pycache__
 

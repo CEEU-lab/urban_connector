@@ -85,9 +85,14 @@ def create_service_area_by_weight_limit(gdf_edges, weight_limit):
     df_edges_weight_limit['w_limit'] = weight_limit
     return df_edges_weight_limit
 
-def calculate_service_edges(graph, gdf_nodes, gdf_edges, f_weight, v_weight_limit, list_source_nodes):
+
+def calculate_all_nodes_and_edges(graph, gdf_nodes, gdf_edges, f_weight, list_source_nodes):
     df_weight_times = calculate_travel_time_to_all_nodes(graph, f_weight, list_source_nodes)
     gdf_nodes, gdf_edges = asign_weight_values_to_nodes_and_edges(gdf_nodes, gdf_edges, df_weight_times)
+    return gdf_nodes, gdf_edges
+
+def calculate_service_edges(graph, gdf_nodes, gdf_edges, f_weight, v_weight_limit, list_source_nodes):
+    gdf_nodes, gdf_edges = calculate_all_nodes_and_edges(graph, gdf_nodes, gdf_edges, f_weight, list_source_nodes)
     df_edges_weight_limit = create_service_area_by_weight_limit(gdf_edges, v_weight_limit)
     return df_edges_weight_limit
 
@@ -95,7 +100,7 @@ def calculate_service_edges(graph, gdf_nodes, gdf_edges, f_weight, v_weight_limi
 ## SERVICES AREAS
 
 # create service area for a single weight limit
-def create_service_area(gdf_edges, v_crs_proj, v_buffer_meters, v_dissolve_distance):
+def create_isochrones(gdf_edges, v_crs_proj, v_buffer_meters, v_dissolve_distance):
     weight_limit_value = list(gdf_edges.w_limit.unique())[0]
     v_dissolve_distance_retract = (-0.99) * v_dissolve_distance
     v_buffer_meters = v_buffer_meters - v_dissolve_distance *0.01
@@ -113,7 +118,7 @@ def create_service_area(gdf_edges, v_crs_proj, v_buffer_meters, v_dissolve_dista
     return gdf_edges_buffer
 
 # merge service areas of different weight limits, into polygons or rings by limit weight
-def merge_service_areas_polygons( list_gpd_service_areas, v_type='rings'):
+def merge_isochrones_polygons( list_gpd_service_areas, v_type='rings'):
 
     gpd_all_areas = pd.concat(list_gpd_service_areas) 
     gpd_all_areas = gpd_all_areas.sort_values('w_limit', ascending=True).reset_index(drop=True)
@@ -139,14 +144,14 @@ def merge_service_areas_polygons( list_gpd_service_areas, v_type='rings'):
         return gpd_all_areas
     
 ## SERVICES AREAS FOR MULTIPLE weight LIMITS
-def create_service_area_for_multiple_weights(graph, gdf_nodes, gdf_edges, f_weight , list_weight, list_source_nodes, v_buffer_meters, v_dissolve_distance, area_type='rings', v_crs_proj="3857"): 
+def create_isochrones_for_multiple_weights(graph, gdf_nodes, gdf_edges, f_weight , list_weight, list_source_nodes, v_buffer_meters, v_dissolve_distance, area_type='rings', v_crs_proj="3857"): 
 
     list_weights_buffers = []
     for v_weight_limit in list_weight:
         df_edges_weight_limit = calculate_service_edges(graph, gdf_nodes, gdf_edges, f_weight, v_weight_limit, list_source_nodes)
-        df_edges_weight_limit_buffer = create_service_area(df_edges_weight_limit, v_crs_proj, v_buffer_meters, v_dissolve_distance)
+        df_edges_weight_limit_buffer = create_isochrones(df_edges_weight_limit, v_crs_proj, v_buffer_meters, v_dissolve_distance)
         list_weights_buffers.append(df_edges_weight_limit_buffer)
 
-    gdf_service_areas = merge_service_areas_polygons( list_weights_buffers, area_type)
+    gdf_service_areas = merge_isochrones_polygons( list_weights_buffers, area_type)
 
     return gdf_service_areas

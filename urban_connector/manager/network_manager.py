@@ -32,8 +32,6 @@ def create_geodata_from_graph(graph):
     gdf_edges['node_id_en'] = gdf_edges.apply(lambda row: row.edge_id[1], axis=1)
     gdf_edges.loc[gdf_edges.geometry.isnull(), 'geometry'] = gdf_edges.loc[gdf_edges.geometry.isnull()].apply(lambda row:  get_edges_geom_from_id(row, dict_mapping_nodes), axis=1)
 
-    gdf_edges.node_id_st = gdf_edges.node_id_st.astype(float)
-    gdf_edges.node_id_en = gdf_edges.node_id_en.astype(float)
     gdf_edges.weight = gdf_edges.weight.astype(float)
 
     gdf_nodes.crs = graph.graph['crs']
